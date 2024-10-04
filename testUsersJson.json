@@ -1,0 +1,38 @@
+[
+  {
+    "username": "mandy",
+    "email": "mandy@gmail.com",
+    "password": "987654321",
+    "role": "MANAGER"
+  },
+  {
+    "username": "sandy",
+    "email": "sandy@gmail.com",
+    "password": "456789123",
+    "role": "CHEF"
+  },
+  {
+    "username": "pandu",
+    "email": "pandu@gmail.com",
+    "password": "147258369",
+    "role": "GUEST"
+  },
+  {
+    "username": "shreyansjain",
+    "email": "coolshreyans01@gmail.com",
+    "password": "123456789",
+    "role": "ADMIN"
+  },
+  {
+    "username": "sharukh",
+    "email": "sharukh@gmail.com",
+    "password": "321654987",
+    "role": "SUPERVISOR"
+  },
+  {
+    "username": "gopidi7124",
+    "email": "gopidi7124@skrak.com",
+    "password": "HhiSd8Tv",
+    "role": "GUEST"
+  }
+]

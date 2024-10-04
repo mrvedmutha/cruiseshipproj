@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# api/signup
+/src/app/api/signup
+
+# testUserJson
+testUserJson.json
