@@ -11,7 +11,6 @@ export const productFormSchema = z.object({
   isAvailable: z.boolean(),
   category: z.string(),
   productAttributes: z.array(z.string()).optional(),
-  isStockRequired: z.boolean(),
-  stock: z.number(),
+  stock: z.string(),
   isScheduledRequired: z.boolean(),
 });

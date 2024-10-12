@@ -8,7 +8,7 @@ export interface IProduct {
   productImage?: string;
   isAvailable: boolean;
   category: ICategory;
-  productAttributes?: Array<{ name: string; values: string[] }>;
-  stock: number;
-  isScheduledRequired: boolean;
+  productAttributes?: Array<{ _id: string; name: string; values: string[] }>;
+  stock?: number;
+  isScheduledRequired?: boolean;
 }

@@ -61,6 +61,21 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
     },
+    screens: {
+      xs: "360px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
+    divideWidth: {
+      DEFAULT: "1px",
+      0: "0",
+      2: "2px",
+      4: "4px",
+      8: "8px",
+    },
   },
   plugins: [require("tailwindcss-animate")],
 };

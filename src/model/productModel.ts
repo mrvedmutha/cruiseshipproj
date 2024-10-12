@@ -10,12 +10,12 @@ const productSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   productAttributes: [
     {
-      name: { type: String, required: true },
-      values: [{ type: String, required: true }],
+      name: { type: String },
+      values: [{ type: String }],
     },
   ],
-  stock: { type: Number, required: true, default: 0 },
-  isScheduledRequired: { type: Boolean, required: true, default: false },
+  stock: { type: Number, default: 0 },
+  isScheduledRequired: { type: Boolean, default: false },
 });
 
 const Product =

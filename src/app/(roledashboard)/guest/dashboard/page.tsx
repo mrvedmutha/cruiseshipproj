@@ -18,7 +18,7 @@ export default function GuestPage() {
   const [data, setData] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const baseUrl = useEffect(() => {
+  useEffect(() => {
     getProductData()
       .then((fetchedData: IProduct[]) => {
         setData(fetchedData);

@@ -31,6 +31,7 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 import { Badge } from "../ui/badge";
+import { Checkbox } from "../ui/checkbox";
 
 interface EditProductFormProps {
   productId: string;
@@ -55,13 +56,15 @@ export function EditProductForm({ productId }: EditProductFormProps) {
       productImage: "",
       isAvailable: true,
       category: "",
-      isStockRequired: false,
-      stock: 0,
+      stock: "",
       productAttributes: [],
+      isScheduledRequired: false,
     },
   });
 
   react.useEffect(() => {
+    console.log("Is form valid:", form.formState.isValid);
+    console.log(form.formState.errors);
     const fetchCategory = async () => {
       try {
         const res = await axios.get(`/api/category`);
@@ -75,7 +78,7 @@ export function EditProductForm({ productId }: EditProductFormProps) {
       try {
         const res = await axios.get(`/api/products/${productId}`);
         const productData = res.data.data;
-        console.log("Fetched product data: ", productData);
+        //console.log("Fetched product data: ", productData); //TODO remove
         form.setValue("productName", productData.productName);
         form.setValue("productDescription", productData.productDescription);
         form.setValue("productPrice", productData.productPrice.toString());
@@ -83,15 +86,16 @@ export function EditProductForm({ productId }: EditProductFormProps) {
         form.setValue("isAvailable", productData.isAvailable);
         form.setValue("category", productData.category);
         setAttributes(productData.productAttributes || []);
-        console.log("Attributes set: ", productData.productAttributes);
-        form.setValue("isStockRequired", productData.isStockRequired);
-        form.setValue("stock", productData.stock);
+        // console.log("Attributes set: ", productData.productAttributes); //TODO remove
+        form.setValue("stock", productData.stock.toString());
+        form.setValue("isScheduledRequired", productData.isScheduledRequired);
       } catch (error: any) {
         console.error("Error fetching product: ", error.message);
       }
     };
     fetchCategory();
     fetchProduct();
+    // }, [productId, form, form.formState.isValid, form.formState.errors]); //TODO Alternate debugging method
   }, [productId, form]);
   const imageHandleFileChange = (e: react.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
@@ -123,7 +127,6 @@ export function EditProductForm({ productId }: EditProductFormProps) {
     data
   ) => {
     console.log("Submitted data: ", data);
-    console.log(form.formState.errors);
     setIsLoading(true);
     try {
       const formData = new FormData();
@@ -137,7 +140,11 @@ export function EditProductForm({ productId }: EditProductFormProps) {
         "isScheduledRequired",
         data.isScheduledRequired ? "true" : "false"
       );
-
+      const attributesOfProduct = formData.append(
+        "productAttributes",
+        JSON.stringify(attributes)
+      );
+      console.log(`attributesOfProduct: ${attributesOfProduct}`); //TODO remove
       const fileInput =
         (document.getElementById("productImage") as HTMLInputElement).files ||
         null;
@@ -156,7 +163,7 @@ export function EditProductForm({ productId }: EditProductFormProps) {
           },
         }
       );
-      console.log("Response from server: ", resultData);
+      console.log("Response from server: ", resultData); //TODO remove
       if (!resultData) {
         toast({
           variant: "destructive",
@@ -164,7 +171,7 @@ export function EditProductForm({ productId }: EditProductFormProps) {
           description: "Error while updating product",
         });
       }
-      console.log(resultData);
+      // console.log(resultData); //TODO remove
       await router.push("/admin/products");
       toast({
         variant: "default",
@@ -183,7 +190,7 @@ export function EditProductForm({ productId }: EditProductFormProps) {
       setIsLoading(false);
     }
   };
-
+  console.log("Form is being rendered"); //TODO remove
   return (
     <div className="p-5">
       <Form {...form}>
@@ -388,6 +395,37 @@ export function EditProductForm({ productId }: EditProductFormProps) {
                   </Select>
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="stock"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Stock</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Stock" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isScheduledRequired"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex space-x-4 place-items-end">
+                  <FormLabel>Is Scheduled Required: check if yes</FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />

@@ -1,7 +1,6 @@
 "use client";
 import * as react from "react";
 import { productFormSchema } from "@/schema/productFormSchema";
-import { IProduct } from "@/types/productInterface";
 import {
   Form,
   FormControl,
@@ -31,7 +30,7 @@ import {
   SelectGroup,
 } from "@/components/ui/select";
 import { Badge } from "../ui/badge";
-import { set } from "mongoose";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function ProductForm() {
   const [category, setCategory] = react.useState<any[]>([]);
@@ -62,8 +61,7 @@ export function ProductForm() {
       isAvailable: true,
       category: "",
       productAttributes: [],
-      isStockRequired: true,
-      stock: 0,
+      stock: "",
       isScheduledRequired: false,
     },
   });
@@ -340,8 +338,39 @@ export function ProductForm() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="stock"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Stock</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Stock" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isScheduledRequired"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex space-x-4 place-items-end">
+                  <FormLabel>Is Scheduled Required: check if yes</FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Please wait..." : "Update Product"}
+            {isLoading ? "Please wait..." : "Create Product"}
           </Button>
         </form>
       </Form>

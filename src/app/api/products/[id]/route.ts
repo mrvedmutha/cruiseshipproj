@@ -101,6 +101,7 @@ export async function PUT(
 
   try {
     const formData = await req.formData();
+    console.log({ formData }); //TODO remove
     const productName = formData.get("productName") as string;
     const productDescription = formData.get("productDescription") as string;
     const productPrice = formData.get("productPrice") as string;
@@ -111,17 +112,22 @@ export async function PUT(
     const stock = formData.get("stock") as string;
     const isScheduledRequired = formData.get("isScheduledRequired") === "true";
     const productAttributesRaw = formData.get("productAttributes");
-    if (exProductImage && exProductImage !== "") {
-      await unlink(
-        path.join(
-          process.cwd(),
-          "public",
-          "uploads",
-          "products",
-          exProductImage
-        )
-      );
+    console.log({ productAttributesRaw }); //TODO remove
+    if (productImage && productImage.size > 0) {
+      if (exProductImage && exProductImage !== "") {
+        await unlink(
+          path.join(
+            process.cwd(),
+            "public",
+            "uploads",
+            "products",
+            exProductImage
+          )
+        );
+        console.log("Deleted old image: ", exProductImage); //TODO Remove
+      }
     }
+
     let fileName = "";
     if (productImage) {
       const buffer = Buffer.from(await productImage.arrayBuffer());
@@ -155,6 +161,9 @@ export async function PUT(
       )}-${uniqueSuffix}.${mime.getExtension(productImage.type)}`;
       await writeFile(path.join(imagePath, fileName), buffer);
     }
+    // const productAttrParse = JSON.parse(productAttributesRaw as string);
+    // console.log({ productAttrParse }); //TODO remove
+    // console.log(productAttrParse[0].values); //TODO remove
     const updateData = {
       productName,
       productDescription,
@@ -162,8 +171,8 @@ export async function PUT(
       ...(fileName && { productImage: fileName }),
       isAvailable,
       category,
-      stock: parseInt(stock),
       productAttributes: JSON.parse(productAttributesRaw as string),
+      stock: parseInt(stock),
       isScheduledRequired,
     };
     const updateProduct = await productService.updateProductById(
