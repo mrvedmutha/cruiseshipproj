@@ -26,7 +26,8 @@ import {
 } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
-import { set } from "mongoose";
+import axios, { AxiosError } from "axios";
+
 export function SingleProduct({ productId }: { productId: string }) {
   const [product, setProduct] = React.useState<IProduct>();
   const [loading, setLoading] = React.useState(true);
@@ -79,21 +80,15 @@ export function SingleProduct({ productId }: { productId: string }) {
           {
             product: {
               _id: product?._id,
-              productAttributes: formattedAttributes,
             },
             quantity: quantity,
+            orderProductAttributes: formattedAttributes,
           },
         ],
       };
       console.log("Order data: ", { orderData });
-      const res = await fetch("/api/order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-      // console.log({ res }); //TODO remove
+      const res = axios.post("/api/orders/create", orderData);
+      console.log({ res }); //TODO remove
     } catch (error: any) {
       toast({
         title: "Error",

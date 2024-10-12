@@ -1,14 +1,18 @@
 import Order from "@/model/orderModel";
+import { getNextOrderId } from "./getNextOrderId";
 
 export const orderService = {
   async createOrder(
-    orderID: string,
     orderDate: Date,
     status: string,
     user: string,
     products: any
   ) {
+    const nextOrderId = await getNextOrderId();
+    const orderID = `ORD${String(nextOrderId).padStart(4, "0")}`;
+    console.log(orderID); //
     const newOrder = new Order({ orderID, orderDate, status, user, products });
+    console.log(newOrder);
     await newOrder.save();
   },
   async getOrder() {
